@@ -1,0 +1,123 @@
+README for text categorization
+
+1. download latest fastText on https://github.com/facebookresearch/fastText
+
+2. Data preprocessing
+- copy ../classify/data/data_with_middle_layer.json to ./data folder
+- python midlevel_bhr.py for mid-level categories
+- python leaflevel_bhr.py for leaf categories
+
+
+Variables and ranges for building model
+--------------------------------------
+- word N grams: Yes or no. If yes, 2 or 3.     -wordNgrams 
+- training and validation set split
+   - 80-20  - 42560 and 10640
+   - 85-15  - 45200 and 8000 
+   - does not seem to make a difference. Will go for 85-15
+
+- word vector choices  -pretrainedVectors
+   - build word vector by specifying -dim param
+   - wiki-news-300d-1M-subword.vec
+   - glove.3B.300d
+
+- epochs   -epoch
+   - 300
+
+- threshold   -t
+   - 0.2
+
+- number of labels to be generated
+   - 1
+   - 3
+   - 5
+   - 10
+
+split the data output files, leaf_bhr.txt and mid_level_bhr.txt, into 
+   - 45,200 training set and 8000 validation set (85% and 15%)
+   - 42,560 training set and 10,640 validation set (80% and 20%)
+
+
+Model generation:
+./fasttext supervised -input xxx.train -output model_xxx -epoch 25 
+
+Running
+fasttext test <model filename>.bin <validation file>
+
+Model generation choices with 80/20 training and validation split:
+1. From PoC: 
+fasttext supervised -input <training file> -output <model file> -epoch 15 -wordNgrams 2 -dim 300 -lr 1.0 -pretrainedVectors <word vector dir>/wiki-news-300d-1M-subword.vec
+
+2. fasttext supervised -input xxx.train -output model_xxx -epoch 25
+
+3. fasttext supervised -input midlevel_bhrrc_train.txt -output midlevel_model -t 0.2 -epoch 300 -wordNgrams 2 -dim 300 -lr 1.0
+    - 80/20:
+	P@1	0.774
+	R@1	0.167
+
+4. fasttext supervised -input midlevel_bhrrc_train.txt -output midlevel_model -epoch 300 -t 0.2  -wordNgrams 2 -lr 1.0 -dim 300 -pretrainedVectors wordvectors/wiki-news-300d-1M-subword.vec
+    - 80/20:
+	P@1	0.774
+	R@1	0.166
+
+5. same as 3 with 85/15
+	P@1	0.777
+	R@1	0.168
+
+6. validating model generated in #3 with more than 1 categories:
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 5
+P@5	0.622
+R@5	0.611
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 6
+P@6	0.57
+R@6	0.671
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 8
+P@8	0.478
+R@8	0.75
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 9
+P@9	0.44
+R@9	0.777
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 10
+P@10	0.408
+R@10	0.8
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 11
+P@11	0.38
+R@11	0.821
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 12
+P@12	0.356
+R@12	0.838
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 15
+P@15	0.298
+R@15	0.878
+
+fasttext test midlevel_model.bin midlevel_bhr_validation.txt 20
+P@20	0.234
+R@20	0.921
+
+Leaf level validation:
+fasttext test leaflevel_model.bin leaflevel_bhr_validation.txt 5
+P@5	0.581
+R@5	0.413
+
+fasttext test leaflevel_model.bin leaflevel_bhr_validation.txt 6
+P@6	0.536
+R@6	0.458
+
+P@8	0.462
+R@8	0.526
+
+P@10	0.403
+R@10	0.574
+
+P@15	0.304
+R@15	0.649
+
+

@@ -1,0 +1,21 @@
+README for text classification
+
+1. download latest fastText on https://github.com/facebookresearch/fastText
+
+2. Data preprocessing
+- python prepdata.py  - to generate json file containing label and text from HR & non-HR data
+- python classify.py - to convert json file to the txt file ready to feed into fasttext
+
+3. split the data 80% training, 20% validation
+- head -n 53000 classify.txt > classify_training.txt
+- tail -n 13192 classify.txt > classify_validation.txt
+
+4. Model generation
+- fasttext supervised -input classify_training.txt -output classify_model -t 0.2 -epoch 300 -wordNgrams 2 -dim 300 -lr 1.0
+
+
+5. Model validation
+- fasttext test classify_model.bin classify_validation.txt
+
+6. predict
+- fasttext predict model_cooking.bin < <the text corpus to be classified>

@@ -1,0 +1,14 @@
+
+Folders:
+
+feeds
+Contains getnews.py, the driver script that should be run to classify and categorize news from various feeds after build models to classify and categorize.
+
+classify
+Contains the instructions in README file to generate the model to classify news items relevant to BHRRC (tagged with  '__label__HR__') and news items that are not relevant to BHRRC (tagged with '__label__NON_HR__').
+
+categorize
+Contains the instructions in README file to generate 2 models: model to categorize a news item at middle levels and a model to categorize a news item at leaf levels.
+
+util
+contains utility functions used by python code in other 3 directories.

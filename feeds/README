@@ -1,0 +1,14 @@
+
+This folder contains utilities to crawl news feeds and generate either csv or json file or a file that's directly consumable by fasttext
+
+Thinking of using RSS feed that is an aggregate of news items of interest 
+(started with the search term 'business')
+
+How to create a feed of Google News: https://www.lifewire.com/google-news-custom-rss-feed-3486648
+
+
+Using Universal Feed Parser for python code as described at https://wiki.python.org/moin/RssLibraries
+- install feedparser with the command 'pip3 install feedparser'
+- use Future for multi-threading of fetch from multiple feeds. Code downloaded in util folder.
+- install dateutil:   pip3 install python-dateutil
+- install lxml: pip3 install lxml
